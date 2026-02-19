@@ -94,6 +94,7 @@ if __name__ == "__main__":
 ## Check running containers
 # docker ps
 
+
 ## Stop the container
 # docker stop <container_id_or_name>
 

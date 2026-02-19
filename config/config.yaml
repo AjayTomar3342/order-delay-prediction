@@ -1,0 +1,170 @@
+seed: 42
+
+# =========================
+# File Paths
+# =========================
+paths:
+  raw_data: data/raw/shipments_raw.csv
+  processed_data: data/processed/clean_data.csv
+  feature_engineered_file: data/processed/feature_date.csv
+
+sample_frac: 0.1
+
+# =========================
+# Column Configuration
+# =========================
+columns:
+  target: Late_delivery_risk
+
+  drop_columns:
+    - Days for shipping (real)
+    - Benefit per order
+    - Delivery Status
+    - Category Id
+    - Customer Email
+    - Customer Fname
+    - Customer Id
+    - Customer Lname
+    - Customer Password
+    - Customer Street
+    - Customer Zipcode
+    - Department Id
+    - Order Customer Id
+    - Order Id
+    - Order Item Cardprod Id
+    - Order Item Discount Rate
+    - Order Item Id
+    - Order Item Product Price
+    - Order Item Profit Ratio
+    - Order Item Total
+    - Order Profit Per Order
+    - Order Status
+    - Order Zipcode
+    - Product Card Id
+    - Product Description
+    - Product Image
+    - Product Name
+    - Product Price
+    - Product Status
+    - shipping date (DateOrders)
+
+  processed_required_columns:
+    - Type
+    - Days for shipment (scheduled)
+    - Sales per customer
+    - Late_delivery_risk
+    - Category Name
+    - Customer City
+    - Customer Country
+    - Customer Segment
+    - Customer State
+    - Department Name
+    - Latitude
+    - Longitude
+    - Market
+    - Order City
+    - Order Country
+    - order date (DateOrders)
+    - Order Item Discount
+    - Order Item Quantity
+    - Sales
+    - Order Region
+    - Order State
+    - Product Category Id
+    - Shipping Mode
+
+  cleaning:
+    na_fill_values:
+      Sales: 0
+      Order Item Quantity: 1
+      Customer Segment: "Unknown"
+
+    type_conversion:
+      Type: string
+      Days for shipment (scheduled): int
+      Sales per customer: float
+      Late_delivery_risk: int
+      Order Item Quantity: int
+      order date (DateOrders): datetime
+      Order Item Discount: float
+      Sales: float
+
+    date_columns:
+      - order date (DateOrders)
+
+    drop_duplicates: true
+
+# =========================
+# Snowflake Configuration
+# =========================
+snowflake:
+  user: "AJAYTOMAR6639"
+  password: "Bkbiet1680000!"
+  account: "DGWBLSR-KT30715"
+  warehouse: "COMPUTE_WH"
+  database: "SNOWFLAKE_LEARNING_DB"
+  schema: "PUBLIC"
+  feature_table: "ORDER_DELAY_FEATURES"
+
+# =====================================================
+# 🔥 NEW: Modeling Configuration (ADDED, NOTHING REMOVED)
+# =====================================================
+
+modeling:
+  target_column: Late_delivery_risk
+
+  numerical_columns:
+    - Days for shipment (scheduled)
+    - order_hour
+
+  categorical_columns:
+    - Type
+    - Category Name
+    - Customer City
+    - Customer Country
+    - Customer Segment
+    - Customer State
+    - Department Name
+    - Market
+    - Order City
+    - Order Country
+    - Order Region
+    - Order State
+    - Shipping Mode
+
+  train_test_split:
+    test_size: 0.2
+    random_state: 42
+    stratify: true
+
+  models:
+    logistic_regression:
+      max_iter: 1000
+      class_weight: balanced
+
+    random_forest:
+      n_estimators: 200
+      random_state: 42
+      class_weight: balanced
+
+    gradient_boosting:
+      n_estimators: 200
+      learning_rate: 0.1
+      max_depth: 3
+      random_state: 42
+
+    xgboost:
+      n_estimators: 300
+      learning_rate: 0.05
+      max_depth: 6
+      subsample: 0.8
+      colsample_bytree: 0.8
+      eval_metric: logloss
+      random_state: 42
+
+  evaluation_metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - roc_auc

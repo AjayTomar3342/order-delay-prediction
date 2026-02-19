@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+
+# Data
+data/
+mlruns/
+logs/
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+
+# Docker
+*.log
+
+# Models & artifacts
+artifacts/
+mlruns/
+
+
+# Logs
+logs/

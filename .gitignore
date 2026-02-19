@@ -5,10 +5,10 @@ __pycache__/
 *.pyd
 .venv/
 
-# Data
-data/
-mlruns/
-logs/
+## Data
+#data/
+#mlruns/
+#logs/
 
 # OS
 .DS_Store

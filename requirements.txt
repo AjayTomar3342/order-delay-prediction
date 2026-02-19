@@ -3,7 +3,8 @@ fastapi>=0.129.0
 uvicorn[standard]>=0.41.0
 
 # Data Processing & Math
-pandas>=3.0.1
+# Downgraded to stay compatible with MLflow 3.9.0
+pandas>=2.2.3,<3.0.0
 numpy>=2.4.2
 
 # Machine Learning & Tracking

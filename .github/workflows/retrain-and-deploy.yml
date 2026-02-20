@@ -4,47 +4,58 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Allows you to run this manually from the GitHub UI
 
 jobs:
   retrain-and-build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the code from your repo
+      # 1. Preparation
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Set up the Python environment
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip' # Speeds up subsequent runs
+          cache: 'pip'
 
-      # 3. Install necessary ML libraries
+      # 2. Environment Setup
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # 4. Execute your ML training script
+      # 3. Model Training & Artifact Generation
+      # This runs your script, tracks in MLflow, and saves 'best_model.pkl'
       - name: Run model retraining
+        env:
+          # If your main.py needs Snowflake credentials, add them as secrets too
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
         run: |
           python main.py
 
-      # 5. Set up Docker Buildx (Required for modern builds)
+      # 4. Containerization Prep
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 6. Build the Docker image locally
-      # This confirms your Dockerfile actually works
-      - name: Build Docker image
-        run: |
-          docker build -t order-delay-api:latest .
+      # 5. Registry Authentication
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Note: To push to Docker Hub, you'll eventually need:
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      # 6. Build and Push to Docker Hub
+      # Logic: It packages the FastAPI code + the freshly trained best_model.pkl
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # IMPORTANT: Change 'your-dockerhub-username' to your actual Docker Hub ID
+          tags: |
+            ajaytomar66390/order-delay-api:latest
+            ajaytomar66390/order-delay-api:${{ github.run_number }}

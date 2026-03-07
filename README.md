@@ -164,6 +164,64 @@ To prevent **Silent Model Decay**, this system uses automated statistical guards
 
 ---
 
+
+
+## ⚙️ Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Data Warehouse | Snowflake |
+| Data Processing | Python, Pandas |
+| Machine Learning | Scikit-Learn |
+| Experiment Tracking | MLflow |
+| API Serving | FastAPI |
+| Containerization | Docker |
+| CI/CD | GitHub Actions |
+| Monitoring | Statistical Drift Checks (KS Test, Chi² Test) |
+
+---
+
+## API Example
+
+Example request:
+
+```bash
+curl -X POST "http://127.0.0.1:8000/predict" \
+-H "Content-Type: application/json" \
+-d '{
+  "shipping_mode": "Standard Class",
+  "order_country": "USA",
+  "customer_country": "USA",
+  "sales": 120.5,
+  "quantity": 3
+}'
+```
+
+Example response:
+
+```json
+{
+  "late_delivery_risk": 0.73,
+  "prediction": "Late"
+}
+```
+
+---
+
+## CI/CD Automation
+
+The project includes automated workflows using **GitHub Actions**:
+
+- Automated **model retraining**
+- **Drift monitoring checks**
+- **CI pipeline validation**
+- Artifact generation for new champion models
+
+Workflows are located in:
+
+```
+.github/workflows/
+```
 ## Technical "War Stories" & Decisions
 
 **The Encoding Challenge**
@@ -177,3 +235,6 @@ Decoupled API design from raw data names using a mapping layer in `predictor.py`
 **Memory Management**
 
 Implemented automated log rotation in `logger.py` to ensure long-term stability in production environments by keeping only the 10 most recent runs.
+
+
+---

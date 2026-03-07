@@ -55,3 +55,85 @@ Rather than assuming one algorithm is best, `modeling.py` implements a competiti
 ├── logs/                    # Execution logs (Automated rotation)
 ├── monitoringresults/       # JSON Drift Reports
 └── Dockerfile               # Production Containerization
+
+
+## 🛠️ Execution Guide & Workflow
+
+This project is designed as a linear MLOps pipeline. Each stage generates artifacts (logs, processed data, or models) required by the next stage.
+
+### 1. Environment Setup
+To ensure reproducibility, install the exact versions of the dependencies used during development.
+
+```bash
+# Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+### Phase 1: The Training Pipeline
+Running the orchestrator triggers the full data-to-model lifecycle. This script automates ingestion, cleaning, feature engineering, and the "Model Tournament."
+
+```bash
+python main.py
+
+Pipeline Actions:
+
+Ingestion: Loads shipments_raw.csv with automatic encoding fallback.
+
+Cleaning: Implements config-driven NA filling and type casting.
+
+Engineering: Extracts temporal features and performs correlation-based pruning.
+
+### Phase 2: Experiment Tracking (MLflow)
+Every run is tracked. You can compare the performance of Logistic Regression, Random Forest, and Gradient Boosting side-by-side.
+
+```bash
+mlflow ui
+
+View metrics at: http://127.0.0.1:5000
+
+### Phase 3: Data Drift Audit (Monitoring)
+Before deploying, or as a scheduled health check, run the drift audit. This compares the Training Baseline against Current Data.
+
+```bash
+python src/monitoring/monitor_drift.py
+
+Statistical Tests Performed:
+
+Numerical Features: Kolmogorov-Smirnov (KS) Test (p < 0.05).
+
+Categorical Features: Chi-Square Contingency Test (p < 0.05).
+
+### Phase 4: Production API Serving (FastAPI)
+Deploy the winning model as a REST API. The service includes a predictor class that handles the mapping of API inputs to the model's expected feature names.
+
+```bash
+uvicorn src.api.app:app --reload
+
+### Phase 5: Containerization (Docker)
+Package the entire environment (OS, Python, and Libraries) to ensure "run anywhere" stability.
+
+```bash
+# Build the image
+docker build -t order-delay-api .
+
+# Run the container
+docker run -d -p 8000:8000 --name shipment-service order-delay-api
+
+## Monitoring & Governance
+To prevent "Silent Model Decay," this system uses automated statistical guards:
+
+Numerical Drift: Compares the cumulative distribution of live features against the training baseline.
+
+Categorical Drift: Ensures the proportions of categories (e.g., Market, Shipping Mode) haven't shifted significantly.
+
+Gatekeeping: The generated drift_report.json serves as a programmatic "Gate" for CI/CD—if drift is detected, the deployment of a new model can be automatically blocked.
+
+## Technical "War Stories" & Decisions
+The Encoding Challenge: Implemented a multi-pass ingestion strategy (UTF-8/Latin-1) to ensure high pipeline availability despite messy raw data.
+
+Training-Serving Skew: Decoupled API design from raw data names using a mapping layer in predictor.py, making the system robust to upstream field name changes.
+
+Memory Management: Implemented automated log rotation in logger.py to ensure long-term stability in production environments by keeping only the 10 most recent runs.

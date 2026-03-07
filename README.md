@@ -189,11 +189,21 @@ Example request:
 curl -X POST "http://127.0.0.1:8000/predict" \
 -H "Content-Type: application/json" \
 -d '{
-  "shipping_mode": "Standard Class",
-  "order_country": "USA",
-  "customer_country": "USA",
-  "sales": 120.5,
-  "quantity": 3
+  "Days_for_shipment_scheduled": 5,
+  "order_hour": 14,
+  "Type": "Online",
+  "Category_Name": "Furniture",
+  "Customer_City": "New York",
+  "Customer_Country": "USA",
+  "Customer_Segment": "Corporate",
+  "Customer_State": "NY",
+  "Department_Name": "Home Office",
+  "Market": "East",
+  "Order_City": "Boston",
+  "Order_Country": "USA",
+  "Order_Region": "Northeast",
+  "Order_State": "MA",
+  "Shipping_Mode": "Standard Class"
 }'
 ```
 

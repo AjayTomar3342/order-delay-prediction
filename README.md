@@ -12,6 +12,10 @@ This repository contains a production-grade machine learning system designed to 
 
 ## Detailed System Architecture & Design Patterns
 
+<p align="center">
+  <img src="images/project_schematic.png" width="900">
+</p>
+
 ### 1. Robust Data Ingestion & Cleaning
 Production data is rarely clean. This pipeline implements an **Encoding-Aware Ingestion** strategy:
 

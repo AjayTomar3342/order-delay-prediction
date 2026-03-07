@@ -1,0 +1,75 @@
+{
+    "drift_detected": true,
+    "details": {
+        "Days for shipment (scheduled)": {
+            "type": "numerical",
+            "p_value": 1.0,
+            "drift": false
+        },
+        "Type": {
+            "type": "categorical",
+            "p_value": 1.0,
+            "drift": false
+        },
+        "Category Name": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Customer City": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Customer Country": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Customer Segment": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Customer State": {
+            "type": "categorical",
+            "p_value": 1.0,
+            "drift": false
+        },
+        "Department Name": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Market": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Order City": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Order Country": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Order Region": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Order State": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        },
+        "Shipping Mode": {
+            "type": "categorical",
+            "p_value": 0.0,
+            "drift": true
+        }
+    }
+}

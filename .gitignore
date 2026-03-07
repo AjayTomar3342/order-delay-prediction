@@ -1,28 +1,42 @@
-# Python
+# --- Python Base ---
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 .venv/
+venv/
+ENV/
+build/
+dist/
 
-## Data
-#data/
-#mlruns/
-#logs/
-
-# OS
-.DS_Store
-
-# IDE
+# --- IDEs & OS ---
 .idea/
+.vscode/
+.DS_Store
+*.swp
 
-# Docker
+# --- Data Handling ---
+# 1. Ignore EVERYTHING in data folder by default
+data/*
+
+# 2. BUT explicitly allow the specific file your main.py needs
+!data/raw/shipments_raw.csv
+
+# 3. Keep large raw files or temporary outputs out
+# (Already handled by data/*, but good for clarity)
+*.csv
+*.xlsx
+*.parquet
+!data/raw/shipments_raw.csv
+
+# --- MLOps & Artifacts ---
+# MLflow local tracking data
+mlruns/
+# Training artifacts (models, plots, logs)
+artifacts/
+models/*.pkl
+models/*.h5
+logs/
 *.log
 
-# Models & artifacts
-artifacts/
-mlruns/
-
-
-# Logs
-logs/
+# --- Docker ---
+.dockerignore

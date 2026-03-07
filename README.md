@@ -39,7 +39,7 @@ Rather than assuming one algorithm is best, `modeling.py` implements a competiti
 
 ---
 
-## 📂 Repository Structure
+##  Repository Structure
 ```bash
 .
 ├── .github/workflows/       # CI/CD: Automated Retraining & Deployment
@@ -56,6 +56,7 @@ Rather than assuming one algorithm is best, `modeling.py` implements a competiti
 ├── monitoringresults/       # JSON Drift Reports
 └── Dockerfile               # Production Containerization
 
+---
 
 ## 🛠️ Execution Guide & Workflow
 

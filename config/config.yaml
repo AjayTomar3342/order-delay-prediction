@@ -98,13 +98,13 @@ columns:
 # Snowflake Configuration
 # =========================
 snowflake:
-  user: "AJAYTOMAR6639"
-  password: "Bkbiet1680000!"
-  account: "DGWBLSR-KT30715"
-  warehouse: "COMPUTE_WH"
-  database: "SNOWFLAKE_LEARNING_DB"
-  schema: "PUBLIC"
-  feature_table: "ORDER_DELAY_FEATURES"
+  user: "XXX"
+  password: "XXX!"
+  account: "XXX"
+  warehouse: "XXX"
+  database: "XXX"
+  schema: "XXX"
+  feature_table: "XXX"
 
 # =====================================================
 # 🔥 NEW: Modeling Configuration (ADDED, NOTHING REMOVED)

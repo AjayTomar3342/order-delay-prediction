@@ -57,6 +57,7 @@ A system is only as good as its visibility. This project implements a production
 ├── config/                  # Centralized YAML configurations (brain of the project)
 ├── data/raw                 # Contains raw file for testing the model locally
 ├── images                   # Contains schematic for visual description of the repository
+├── monitoringresults/       # JSON Drift Reports
 ├── src/
 │   ├── api/                 # FastAPI Implementation (App, Schema, Predictor)
 │   ├── ingestion/           # Snowflake & CSV Ingestion Logic
@@ -65,8 +66,6 @@ A system is only as good as its visibility. This project implements a production
 │   ├── monitoring/          # Statistical Drift Detection (KS-Test/Chi2)
 │   └── utils/               # Config Loaders & Rotation Loggers (last 10 runs)
 ├── artifacts/               # Serialized Champion Models (.pkl)
-├── logs/                    # Execution logs (Automated rotation)
-├── monitoringresults/       # JSON Drift Reports
 └── Dockerfile               # Production Containerization
 ```
 

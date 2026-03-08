@@ -19,27 +19,32 @@ This repository contains a production-grade machine learning system designed to 
 ### 1. Robust Data Ingestion & Cleaning
 Production data is rarely clean. This pipeline implements an **Encoding-Aware Ingestion** strategy:
 
-- **Fail-Safe Loading:** Automatically attempts `UTF-8` and falls back to `Latin-1` to prevent pipeline crashes during automated runs.
-- **Config-Driven Cleaning:** Instead of hard-coding logic, all NA-filling (`Sales: 0`, `Quantity: 1`) and type conversions are handled via `config.yaml`. This allows the business logic to change without touching the source code.
+- **Fail-Safe Loading:** As seen in production logs, the system automatically detects `UTF-8` failures and falls back to `Latin-1`, preventing pipeline crashes during automated runs.
+- **Config-Driven Cleaning:** Instead of hard-coding logic, all NA-filling (`Sales: 0`, `Quantity: 1`) and type conversions are handled via `config.yaml`. 
+- **Validation:** The cleaner ensures 0% data loss during type casting, verifying that the 180k+ records maintain integrity from raw to processed states.
 
 ### 2. Feature Store & Engineering Strategy
 To ensure consistency between training and serving (preventing **Training-Serving Skew**):
 
-- **Snowflake Integration:** Features are synced back to Snowflake. This allows other teams to consume the same "Source of Truth" features for BI or other models.
-- **Geospatial & Temporal Logic:** We engineer high-signal features like `cross_country_flag` (comparing Customer vs. Order country) and cyclical `order_hour` extraction.
-- **Automated Pruning:** A correlation-based selector removes features with a coefficient `< 0.01`, reducing model noise and improving training speed.
+- **Snowflake Integration:** Engineered features are synced back to Snowflake, allowing other teams to consume a validated "Source of Truth."
+- **Temporal & Business Logic:** We extract high-signal features such as `order_hour` and `is_weekend`, alongside custom business logic like `discount_per_item`.
+- **Automated Pruning:** A statistical selector automatically drops zero-variance columns and low-correlation features ($< 0.01$). In current runs, this optimized the feature space from 23 down to 16 high-impact variables.
+
+
 
 ### 3. The "Model Tournament" (Auto-Selection)
-Rather than assuming one algorithm is best, `modeling.py` implements a competitive selection process:
+Rather than assuming one algorithm is best, the system runs a competitive "Champion vs. Challenger" tournament:
 
-- **MLflow Tracking:** Every experiment logs hyperparameters, F1-scores, and ROC-AUC curves.
-- **Candidate Models:** We compare **Logistic Regression** (baseline), **Random Forest** (non-linear), and **HistGradientBoosting** (high-performance boosting).
-- **Artifact Persistence:** The winning "Champion" is automatically promoted to the `artifacts/` folder, ready for the API to load.
+- **MLflow Tracking:** Every experiment logs hyperparameters and metrics. Current logs show a **Random Forest Champion** achieving an **ROC-AUC of 0.84**, significantly outperforming the Logistic Regression baseline.
+- **Candidate Models:** Automated evaluation of **Logistic Regression**, **Random Forest**, and **HistGradientBoosting**.
+- **Artifact Persistence:** The winning model is automatically serialized to the `artifacts/` folder, ensuring the FastAPI service always loads the most performant version.
 
 ### 4. Enterprise Logging & Observability
+A system is only as good as its visibility. This project implements a production-grade monitoring strategy:
 
-- **Log Rotation:** The custom `logger.py` implements a retention policy, keeping only the last 10 logs per component. This prevents the server from running out of disk space during high-frequency retraining.
-- **Unified Entry Point:** `main.py` acts as the orchestrator, ensuring that data flows sequentially from Ingestion → Cleaning → Engineering → Modeling.
+- **Log Rotation:** The custom `logger.py` implements a retention policy, keeping only the last 10 logs per component. This prevents disk-space exhaustion during high-frequency retraining.
+- **Component-Level Tracking:** Every stage (Ingestion, Preparation, Modeling) generates independent, timestamped logs, allowing for rapid debugging of "silent" failures in the pipeline.
+- **Unified Entry Point:** `main.py` acts as the orchestrator, ensuring a strict sequential flow: Ingestion → Cleaning → Engineering → Modeling.
 
 ---
 

@@ -20,13 +20,14 @@ This repository contains a production-grade machine learning system designed to 
 Production data is rarely clean. This pipeline implements an **Encoding-Aware Ingestion** strategy:
 
 - **Fail-Safe Loading:** As seen in production logs, the system automatically detects `UTF-8` failures and falls back to `Latin-1`, preventing pipeline crashes during automated runs.
+- **Cost-Optimized Local Ingestion:** While the codebase is enterprise-ready, the current execution in main.py is configured for local ingestion from shipments_raw.csv to eliminate cloud compute costs during development.
 - **Config-Driven Cleaning:** Instead of hard-coding logic, all NA-filling (`Sales: 0`, `Quantity: 1`) and type conversions are handled via `config.yaml`. 
 - **Validation:** The cleaner ensures 0% data loss during type casting, verifying that the 180k+ records maintain integrity from raw to processed states.
 
 ### 2. Feature Store & Engineering Strategy
 To ensure consistency between training and serving (preventing **Training-Serving Skew**):
 
-- **Snowflake Integration:** Engineered features are synced back to Snowflake, allowing other teams to consume a validated "Source of Truth."
+- **Snowflake-Ready Architecture:** The project features a dedicated SnowflakeFeatureStore class. While this is currently bypassed in the main.py workflow in favor of local CSV persistence to save on service fees, the architecture remains fully cloud-compatible and ready for a single-line switch to production.
 - **Temporal & Business Logic:** We extract high-signal features such as `order_hour` and `is_weekend`, alongside custom business logic like `discount_per_item`.
 - **Automated Pruning:** A statistical selector automatically drops zero-variance columns and low-correlation features ($< 0.01$). In current runs, this optimized the feature space from 23 down to 16 high-impact variables.
 
@@ -175,7 +176,7 @@ To prevent **Silent Model Decay**, this system uses automated statistical guards
 
 | Layer | Technology |
 |-------|------------|
-| Data Warehouse | Snowflake |
+| Data Warehouse | Snowflake: Hybrid Mode (Supported / Bypassed locally) |
 | Data Processing | Python, Pandas |
 | Machine Learning | Scikit-Learn |
 | Experiment Tracking | MLflow |

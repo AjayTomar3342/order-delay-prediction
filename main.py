@@ -87,24 +87,24 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+# -----------------------------
+# Fast API commands
+# -----------------------------
+
+## Run fastapi server
 # uvicorn src.api.app:app --reload
 
+# -----------------------------
+# Docker commands
+# -----------------------------
 
-
-## Check running containers
-# docker ps
-
-
-## Stop the container
-# docker stop <container_id_or_name>
-
-## Restart the same container
-# docker start <container_id_or_name>
-
-## Remove a container
-# docker rm <container_id_or_name>
+## Build Docker image
+#docker build -t order-delay-api .
 
 ## Run a new container from image
 # docker run -d -p 8000:8000 --name order-delay-api order-delay-api
 
-
+## Check running containers
+# docker ps

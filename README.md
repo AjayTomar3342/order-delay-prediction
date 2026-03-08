@@ -56,6 +56,7 @@ A system is only as good as its visibility. This project implements a production
 ├── .github/workflows/       # CI/CD: Automated Retraining & Deployment
 ├── config/                  # Centralized YAML configurations (brain of the project)
 ├── data/raw                 # Contains raw file for testing the model locally
+├── images                   # Contains schematic for visual description of the repository
 ├── src/
 │   ├── api/                 # FastAPI Implementation (App, Schema, Predictor)
 │   ├── ingestion/           # Snowflake & CSV Ingestion Logic

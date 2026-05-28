@@ -8,7 +8,7 @@
 ## 📖 Project Vision
 This repository contains a production-grade machine learning system designed to predict **Late Delivery Risks** in global logistics. Unlike a simple model script, this is a **modular ecosystem** built for reliability, scalability, and auditability. It bridges the gap between a cloud data warehouse (**Snowflake**) and a real-time inference service (**FastAPI**), protected by a **Statistical Drift Audit** layer.
 
-### 0. Business Impact
+### Business Impact
 
 -  This project provides a robust MLOps solution to enhance supply chain visibility by predicting shipment delays before they occur.
 -  The system automates the transition from raw logistics data to actionable predictions, significantly reducing the manual effort required for delay tracking.

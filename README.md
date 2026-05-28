@@ -10,9 +10,9 @@ This repository contains a production-grade machine learning system designed to 
 
 ### 0. Business Impact
 
-- **** This project provides a robust MLOps solution to enhance supply chain visibility by predicting shipment delays before they occur.
-- **** The system automates the transition from raw logistics data to actionable predictions, significantly reducing the manual effort required for delay tracking.
-- **** By enabling proactive resource allocation and early risk mitigation, the pipeline helps stabilize operational workflows and improves delivery reliability.
+-  This project provides a robust MLOps solution to enhance supply chain visibility by predicting shipment delays before they occur.
+-  The system automates the transition from raw logistics data to actionable predictions, significantly reducing the manual effort required for delay tracking.
+-  By enabling proactive resource allocation and early risk mitigation, the pipeline helps stabilize operational workflows and improves delivery reliability.
 ---
 
 ## Detailed System Architecture & Design Patterns
